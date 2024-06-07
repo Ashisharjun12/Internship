@@ -1,0 +1,44 @@
+{
+  "med": [
+    {
+      "id": 1,
+      "name": "COMBIFLAM TABS",
+      "mrp": "22.68",
+      "off": "25.03",
+      "marketer":"CIPLA",
+      "dose": "Calcimax Calcium 500 Tablet for Bone \n Health",
+      "qty":0,
+      "desc": "CALCIUM CARBONATE 1250 mg+MAGNESIUM HYDROXIDE 75 mg+ZINC SULPHATE 4 mg+Cholecalciferol(Vit D3) 200 IU+L LYSINE 25 mg+sodium borate 1 MG+ELEMENTAL SELENIUM 35 MCG+COPPER SULPHATE 1 mg"
+    },
+    {
+      "id": 2,
+      "name": "something med",
+      "mrp": "22.68",
+      "off": "25.03",
+      "marketer":"CIPLA",
+      "qty":0,
+      "dose": "Calcimax Calcium 500 Tablet for Bone Health",
+      "desc": "CALCIUM CARBONATE 1250 mg+MAGNESIUM HYDROXIDE 75 mg+ZINC SULPHATE 4 mg+Cholecalciferol(Vit D3) 200 IU+L LYSINE 25 mg+sodium borate 1 MG+ELEMENTAL SELENIUM 35 MCG+COPPER SULPHATE 1 mg"
+    },
+    {
+      "id": 3,
+      "name": "COMBIFLAM TABS",
+      "mrp": "22.68",
+      "off": "25.03",
+      "marketer":"CIPLA",
+      "qty":0,
+      "dose": "Calcimax Calcium 500 Tablet for Bone \nHealth",
+      "desc": "CALCIUM CARBONATE 1250 mg+MAGNESIUM HYDROXIDE 75 mg+ZINC SULPHATE 4 mg+Cholecalciferol(Vit D3) 200 IU+L LYSINE 25 mg+sodium borate 1 MG+ELEMENTAL SELENIUM 35 MCG+COPPER SULPHATE 1 mg"
+    },
+    {
+      "id": 4,
+      "name": "COMBIFLAM TABS",
+      "mrp": "22.68",
+      "off": "25.03",
+      "marketer":"CIPLA",
+      "qty":0,
+      "dose": "Calcimax Calcium 500 Tablet for Bone Health",
+      "desc": "CALCIUM CARBONATE 1250 mg+MAGNESIUM HYDROXIDE 75 mg+ZINC SULPHATE 4 mg+Cholecalciferol(Vit D3) 200 IU+L LYSINE 25 mg+sodium borate 1 MG+ELEMENTAL SELENIUM 35 MCG+COPPER SULPHATE 1 mg"
+    }
+  ]
+}
