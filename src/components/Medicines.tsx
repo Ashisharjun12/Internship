@@ -2,12 +2,16 @@ import { View, Text ,FlatList, Image, TouchableOpacity} from 'react-native'
 import React from 'react'
 import medicineData from '../json/data.json';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const Medicines = () => {
 
   const navigation = useNavigation()
 
-    const {med: medicines} = medicineData;
+  const myproducts = useSelector(state => state.product)
+ 
+
+    
 
    
 
@@ -15,7 +19,7 @@ const Medicines = () => {
   return (
     <View>
        <FlatList
-          data={medicines}
+          data={myproducts}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => {
             return (

@@ -1,15 +1,17 @@
-import { View, Text, Image , TouchableOpacity} from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { View, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const Goback = () => {
-    const navigation = useNavigation()
+import defaultImage from '../Images/back.png';
+
+const Goback = ({ source }) => {
+  const navigation = useNavigation();
+  
   return (
-    <TouchableOpacity onPress={()=>{navigation.goBack()}}
-     style={{marginTop:10 , marginLeft:10}}>
-      <Image source={require('../Images/back.png')}/>
+    <TouchableOpacity onPress={() => { navigation.goBack(); }} style={{ marginTop: 10, marginLeft: 10 }}>
+      <Image source={source ? source : defaultImage} />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default Goback
+export default Goback;

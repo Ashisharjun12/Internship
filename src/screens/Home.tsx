@@ -77,11 +77,12 @@ const Home = () => {
         </View>
 
         {/* banner */}
-        <View style={{padding: 5}}>
+        <View style={{ width:responsiveWidth(100) , height:140 }}>
           <Image
             source={require('../Images/special.png')}
-            width={386}
+            width={responsiveWidth(100)}
             height={140}
+           
           />
         </View>
 

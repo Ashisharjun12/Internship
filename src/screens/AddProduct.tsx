@@ -1,15 +1,36 @@
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
 import React from 'react';
-import {useRoute} from '@react-navigation/native';
+import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Goback from '../utils/Goback';
 import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import {useDispatch, useSelector} from 'react-redux';
+import {addMyProductToMyCart, removeMyCartItem, removeOneCartItem} from '../Redux/MyCartSlice';
+import {IncreseQty, DecreaseQty} from '../Redux/ProductSlice';
 
 const AddProduct = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const {product} = route.params;
+
+  const mycartitem = useSelector(state => state.cart);
+  console.log('added product', mycartitem);
+
+  const dispatch = useDispatch();
+
+  const totalPrice = () => {
+    let total = 0;
+    mycartitem.map(item => {
+      total = total + item.qty * item.mrp;
+    });
+    return total;
+  };
+
+  const cartItem = mycartitem.find(item => item.id === product.id);
+  const productQty = cartItem ? cartItem.qty : 0;
+
   return (
     <ScrollView>
       <View>
@@ -110,20 +131,94 @@ const AddProduct = () => {
 
             {/* buttons */}
 
-            <View style={{flexDirection: 'row', gap: 17, marginTop: 20}}>
-              <TouchableOpacity
-                style={{
-                  width: 220,
-                  height: 43,
-                  backgroundColor: '#097EEB',
-                  borderRadius: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{fontWeight: 500, fontSize: 16, color: '#FFFFFF'}}>
-                  Add To Card
-                </Text>
-              </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 17,
+                marginTop: 20,
+                justifyContent: 'space-between',
+              }}>
+              {productQty === 0 ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(addMyProductToMyCart(product));
+                    dispatch(IncreseQty(product.id));
+                  }}
+                  style={{
+                    width: 220,
+                    height: 43,
+                    backgroundColor: '#097EEB',
+                    borderRadius: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{fontWeight: 500, fontSize: 16, color: '#FFFFFF'}}>
+                    Add To Cart
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                    marginLeft: 8,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      dispatch(addMyProductToMyCart(product));
+                      dispatch(IncreseQty(product.id));
+                    }}
+                    style={{
+                      width: 38,
+                      height: 38,
+                      backgroundColor: '#097EEB',
+                      borderRadius: 99,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{fontWeight: 600, fontSize: 22, color: '#FFFFFF'}}>
+                      {'+'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Text style={{fontWeight: 400, fontSize: 21, color: 'black'}}>
+                    {productQty}
+                  </Text>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (productQty > 1) {
+                        dispatch(removeOneCartItem(product))
+                        dispatch(DecreaseQty(product.id));
+                      } else {
+                        dispatch(removeMyCartItem({id: product.id}));
+                        
+                        dispatch(DecreaseQty(product.id));
+                      }
+                    }}
+                    style={{
+                      width: 38,
+                      height: 38,
+                      backgroundColor: '#097EEB',
+                      borderRadius: 99,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{fontWeight: 600, fontSize: 22, color: '#FFFFFF'}}>
+                      {'-'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {/* add quantity button */}
+
+              {/* end quantity button */}
+
               <TouchableOpacity
                 style={{
                   width: 123,
@@ -139,13 +234,35 @@ const AddProduct = () => {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* button end */}
           </View>
+
+          {/* banner */}
+          <View
+            style={{
+              padding:12,
+              width: responsiveWidth(100),
+              height: 49,
+              backgroundColor: 'white',
+              marginBottom: 2,
+              alignItems:'center', justifyContent:'space-between',
+              flexDirection:'row'
+            }}>
+              <View style={{flexDirection:'row', alignItems:'center' , gap:3}}>
+                <Text style={{fontWeight:400 , fontSize:16 , color:'black'}}>{"MARKETR :"}</Text>
+                <Text style={{fontWeight:400 , fontSize:16 , color:'#097EEB'}}>{product.marketer}</Text>
+              </View>
+              <View>
+                <Text style={{fontSize:12 , fontWeight:400 , color:'#FF0000'}}>{"10 x 6"}</Text>
+              </View>
+            </View>
 
           {/* market cap */}
           <View
             style={{
               width: responsiveWidth(100),
-              height: 43,
+              height: 82,
               backgroundColor: 'white',
               marginTop: 5,
               justifyContent: 'center',
@@ -154,52 +271,26 @@ const AddProduct = () => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: 12,
+                justifyContent: 'space-evenly',
               }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontSize: 16, fontWeight: 400, color: 'black'}}>
-                  MARKETER :{' '}
-                </Text>
-
-                <Text style={{fontSize: 16, fontWeight: 400, color: '#097EEB'}}>
-                  {product.marketer}
+              <View style={{alignItems: 'center', gap: 4}}>
+                <Image source={require('../Images/happy.png')} />
+                <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
+                  {'10K+ Happy Sellers'}
                 </Text>
               </View>
-              <View>
-                <Text style={{color: '#FF0000'}}>{'10 x 6'}</Text>
+              <View style={{alignItems: 'center', gap: 4}}>
+                <Image source={require('../Images/genuine.png')} />
+                <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
+                  {'100% Authentic'}
+                </Text>
               </View>
-            </View>
-          </View>
-
-          {/* some banner */}
-          <View
-            style={{
-              height: 82,
-              width: responsiveWidth(100),
-              backgroundColor: 'white',
-              marginTop: 12,
-              justifyContent: 'space-evenly',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View style={{alignItems: 'center', gap: 4}}>
-              <Image source={require('../Images/happy.png')} />
-              <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
-                {'10K+ Happy Sellers'}
-              </Text>
-            </View>
-            <View style={{alignItems: 'center', gap: 4}}>
-              <Image source={require('../Images/genuine.png')} />
-              <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
-                {'100% Authentic'}
-              </Text>
-            </View>
-            <View style={{alignItems: 'center', gap: 4}}>
-              <Image source={require('../Images/greencheck.png')} />
-              <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
-                {'Quality Checked Products'}
-              </Text>
+              <View style={{alignItems: 'center', gap: 4}}>
+                <Image source={require('../Images/greencheck.png')} />
+                <Text style={{fontSize: 10, fontWeight: 400, color: 'black'}}>
+                  {'Quality Checked Products'}
+                </Text>
+              </View>
             </View>
           </View>
 
@@ -252,28 +343,46 @@ const AddProduct = () => {
 
           {/* add to cart*/}
 
-          <View
-            style={{
-              width: responsiveWidth(90),
-              height: 60,
-              backgroundColor: '#097EEB',
-              alignSelf: 'center',
-              marginTop: 20,
-              borderRadius: 8,
-              justifyContent:'space-between',
-              padding:14,
-              flexDirection:'row',
-              alignItems:'center'
-            }}>
-            <View style={{justifyContent:'center'   }}>
-                <Text style={{fontWeight:500 , fontSize:14 , color:'white'}}>{"1 item"}</Text>
-                <Text style={{fontWeight:500 , fontSize:14 , color:'white'}}>{" Rs 1,024"}</Text>
+          {mycartitem.length > 0 ? (
+            <View
+              style={{
+                width: responsiveWidth(90),
+                height: 60,
+                backgroundColor: '#097EEB',
+                alignSelf: 'center',
+                marginTop: 20,
+                borderRadius: 8,
+                justifyContent: 'space-between',
+                padding: 14,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={{justifyContent: 'center'}}>
+                <Text style={{fontWeight: 500, fontSize: 14, color: 'white'}}>
+                  {mycartitem.length + ' item'}
+                </Text>
+                <Text style={{fontWeight: 500, fontSize: 14, color: 'white'}}>
+                  {' Rs ' + totalPrice()}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('MyCart');
+                }}
+                style={{
+                  height: 40,
+                  width: 123,
+                  borderRadius: 8,
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: '#097EEB', fontWeight: 500, fontSize: 16}}>
+                  Go To Cart
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={()=>{}}
-            style={{height:40 , width:123 , borderRadius:8 ,backgroundColor:'white' , justifyContent:'center' , alignItems:'center'}}> 
-                <Text style={{color:'#097EEB' , fontWeight:500 , fontSize:16}}>Go To Cart</Text>
-            </TouchableOpacity>
-          </View>
+          ) : null}
         </View>
       </View>
     </ScrollView>
